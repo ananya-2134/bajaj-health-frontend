@@ -82,11 +82,14 @@
 
         try {
           const jsonInput = JSON.parse(input);
-          const response = await fetch("http://localhost:3000/bfhl", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(jsonInput),
-          });
+          const response = await fetch(
+            "https://bajaj-health.onrender.com/bfhl",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(jsonInput),
+            }
+          );
 
           if (!response.ok) {
             throw new Error("Server returned an error");
