@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Roll Number</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      #jsonInput {
+        width: 80%;
+        height: 100px;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        resize: none;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      #response {
+        margin-top: 20px;
+        width: 80%;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 14px;
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-x: auto;
+      }
+
+      .error {
+        color: red;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>BFHL Challenge</h1>
+    <textarea id="jsonInput" placeholder="Enter JSON here"></textarea><br />
+    <button onclick="submitData()">Submit</button>
+    <p id="error" class="error"></p>
+    <div id="response"></div>
+
+    <script>
+      async function submitData() {
+        const input = document.getElementById("jsonInput").value;
+        const errorElement = document.getElementById("error");
+        const responseElement = document.getElementById("response");
+
+        errorElement.textContent = ""; // Clear previous error
+        responseElement.textContent = ""; // Clear previous response
+
+        try {
+          const jsonInput = JSON.parse(input);
+          const response = await fetch("http://localhost:3000/bfhl", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(jsonInput),
+          });
+
+          if (!response.ok) {
+            throw new Error("Server returned an error");
+          }
+
+          const data = await response.json();
+          responseElement.textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+          console.log(err);
+          errorElement.textContent = "Invalid JSON or API Error";
+        }
+      }
+    </script>
+  </body>
+</html>
